@@ -16,8 +16,8 @@
           <button class="next" @click="next">Next</button>
         </div>
       </section>
-      <section class="playlist">
-        <h3>Playlist</h3>
+      <section class="queue">
+        <h3>queue</h3>
         <button
           v-for="song in songs"
           :key="song.src"
@@ -65,6 +65,17 @@ export default {
         this.player.src = this.current.src;
       }
       this.player.play();
+      this.player.addEventListener(
+        "ended",
+        function() {
+          this.index++;
+          if (this.index > this.songs.length - 1) {
+            this.index = 0;
+          }
+          this.current = this.songs[this.index];
+          this.play(this.current);
+        }.bind(this)
+      );
       this.isPlaying = true;
     },
     pause() {
@@ -151,27 +162,27 @@ button:hover {
 }
 .next,
 .prev {
-  font-size: 0.5em;
+  font-size: 0.8em;
   padding: 8px 15px;
   margin: 0 15px;
   border-radius: 10px;
   background: antiquewhite;
 }
-.playlist {
+.queue {
   padding: 0 30px;
 }
-.playlist h3 {
+.queue h3 {
   color: #333;
   font-size: 1.2em;
   margin-bottom: 30px;
   text-align: center;
 }
-.playlist .song {
+.queue .song {
   display: block;
   width: 100%;
   padding: 15px;
 }
-.playlist .song.playing {
+.queue .song.playing {
   color: black;
   background-color: blanchedalmond;
 }
